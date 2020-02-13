@@ -23,50 +23,89 @@
         const screen = document.getElementById("screen");
         const context = screen.getContext("2d")
 
-        const game = {
-            players: {
-                'player1': {x:0, y:0},
-                'player2': {x:5, y:0}
-            },
-            fruits:{
-                'fruit1':{x:5, y:5}
+        function createGame() {
+
+            const state = { 
+
+                players: {
+                    'player1': {x:0, y:0},
+                    'player2': {x:5, y:0}
+                },
+
+                fruits: {
+                    'fruit1':{x:5, y:5}
+                },
             }
-        }
 
-        document.addEventListener("keydown", handleKeydown)
+            const acceptedMoves = {
 
-        var movePlayer = {
+                ArrowDown(player){
+                    player.y = player.y + 1
+                },
 
-            ArrowDown: (player) => {
-                player.y = player.y + 1
-            },
+                ArrowUp(player){
+                    player.y = player.y - 1
+                },
 
-            ArrowUp: (player) => {
-                player.y = player.y - 1
-            },
+                ArrowRight(player){
+                    player.x = player.x + 1
+                },
 
-            ArrowRight: (player) => {
-                player.x = player.x + 1
-            },
-
-            ArrowLeft: (player) => {
-                player.x = player.x - 1
+                ArrowLeft(player){
+                    player.x = player.x - 1
+                }
             }
+
+            function movePlayer(command){
+
+                var move = acceptedMoves[command.keyPressed];
+                var player = game.state.players[command.playerId];
+                
+                if(move){
+                    move(player);
+                }
+            }
+            
+            return { movePlayer, state }
         }
         
-
-        function handleKeydown(event) {
-
-            const keyPressed = event.key
-            var player = game.players["player1"]
-
-            move = movePlayer[`${keyPressed}`]
+        function createKeybordListener(){
             
-            if (move) {
+            const state = {
+                observers: []
+            };
+
+            function subscribe(observerFunction) {
                 
-                move(player)
-            }
+                state.observers.push(observerFunction);
+            };
+
+            function notifyAll(command) {
+                console.log(`notifying ${state.observers.length} observers`);
+
+                for (const observerFunction of state.observers) {
+                    observerFunction(command)
+                };
+            };
+
+            document.addEventListener("keydown", handleKeydown);
+        
+            function handleKeydown(event) {
+
+                const command = {
+                    playerId : 'player1',
+                    keyPressed : event.key
+                };
+
+                notifyAll(command)
+            };
+
+            return { subscribe };
         }
+        
+        const game = createGame();
+        const keyboardListener = createKeybordListener()
+        keyboardListener.subscribe(game.movePlayer)
 
         renderScreen()
 
@@ -74,16 +113,16 @@
 
             context.clearRect(0, 0, screen.width, screen.height);  
 
-            for (const playerId in game.players) {
+            for (const playerId in game.state.players) {
 
-                const player = game.players[playerId];
+                const player = game.state.players[playerId];
                 context.fillStyle = "gray";
                 context.fillRect(player.x, player.y, 1, 1);            
             }
 
-            for (const fruitId in game.fruits) {
+            for (const fruitId in game.state.fruits) {
 
-                const fruit = game.fruits[fruitId];
+                const fruit = game.state.fruits[fruitId];
                 context.fillStyle = "green";
                 context.fillRect(fruit.x, fruit.y, 1, 1);            
             }
