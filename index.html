@@ -17,22 +17,32 @@
 
     <body>
         <canvas id="screen" width="10" height="10"></canvas>
+        <script src="/socket.io/socket.io.js"></script>
 
         <script type="module">
             import createKeyboardListener from "./keyboard-listener.js";
             import renderScreen from "./render-screen.js";
-            import {createGame} from './game.js'
+            import {createGame} from './game.js';
 
-            const screen = document.getElementById("screen");
-    
-            const game = createGame();
+            const game = createGame()
+            const keyboardListener = createKeyboardListener();
             
-            const keyboardListener = createKeyboardListener()
             keyboardListener.subscribe(game.movePlayer)
-            game.addPlayer({playerId:"player1", playerX:0, playerY:0})
-            game.addFruit({fruitId:"frutinha", fruitX:3, fruitY:3})
-    
-            renderScreen(screen, game, requestAnimationFrame)
+            
+            const screen = document.getElementById("screen");
+            renderScreen(screen, game, requestAnimationFrame);
+
+            const socket = io();
+
+            socket.on('connect', () => {
+                const playerId = socket.id;
+                console.log(`id client: ${playerId}`)
+            })
+
+            socket.on('setup', (state) => {
+                console.log(`receiving state from server`)
+                game.setState(state);
+            })
             
         </script>
     </body>
