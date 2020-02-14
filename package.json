@@ -1,0 +1,25 @@
+{
+  "name": "jogo-multiplayer",
+  "version": "1.0.0",
+  "description": "jogo multiplayer em js ",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "nodemon": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JorgeWSantos/Jogo-Multiplayer.git"
+  },
+  "author": "jorge w. dos santos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JorgeWSantos/Jogo-Multiplayer/issues"
+  },
+  "homepage": "https://github.com/JorgeWSantos/Jogo-Multiplayer#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}
