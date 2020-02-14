@@ -10,16 +10,42 @@ function createGame() {
         }
     }
 
+    const observers = [];
+
+    function setState(newState) {
+        Object.assign(state, newState)
+    }
+
+    function subscribe(observerFunction) {
+        
+        observers.push(observerFunction);
+    };
+
+    function notifyAll(command) {
+        console.log(`notifying ${state.observers.length} observers`);
+
+        for (const observerFunction of observers) {
+            observerFunction(command)
+        };
+    };
+
     function addPlayer(command) {
 
         const playerId = command.playerId;
-        const playerX = command.playerX;
-        const playerY = command.playerY;
+        const playerX = "playerX" in command ? command.playerX : Math.floor(Math.random() * 10);
+        const playerY = "playerY" in command ? command.playerY : Math.floor(Math.random() * 10);
         
         state.players[playerId] = {
             x: playerX,
             y: playerY
         };
+
+        notifyAll({
+            type: 'add-player',
+            playerId: playerId,
+            playerX: playerX,
+            playerY: playerY,
+        })
     }
 
     function removePlayer(command) {
@@ -113,7 +139,9 @@ function createGame() {
         addPlayer,
         removePlayer,
         addFruit,
-        removeFruit
+        removeFruit,
+        setState,
+        subscribe
     }
 }
 
