@@ -10,21 +10,94 @@
                 image-rendering: crisp-edges;
                 image-rendering: -moz-crisp-edges;
                 width: 400px;
+                min-width: 400px;
                 height: 400px;
+                min-height: 400px;
             }
+
+            div{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                padding-left: 30px;
+                padding-right: 100px;
+            }
+
+            ul{
+                list-style-type:none;
+            }
+
+            #div-ul{
+                width: 300px;
+                border-style: solid;
+                border-radius: 4pt;
+                border-width: 2;
+                border-color: sandybrown;
+                /* background-color: aqua; */
+            }
+
         </style>
     </head>
 
     <body>
-        <canvas id="screen" width="10" height="10"></canvas>
-        <!-- <audio src="./sounds/getfruit.wav"> --->
-        <audio src="./sounds/get100-fruits.wav">
+        <div>
+            <canvas id="screen" width="10" height="10"></canvas>
+            
+            <div id="div-ul">
+                 <ul id="dynamic-list">
+                    <li id="testew"><h4>Point Pannel</h4></li>
+                </ul>
+            </div>
+        </div>
+    
+        <audio id="getfruit" src="./sounds/getfruit.wav"> -
+        <audio id="get100fruit" src="./sounds/get100-fruits.wav">
         <script src="/socket.io/socket.io.js"></script>
+       
 
         <script type="module">
             import createKeyboardListener from "./keyboard-listener.js";
             import renderScreen from "./render-screen.js";
             import {createGame} from './game.js';
+
+            function pointPanel(state){
+
+                var ul = document.getElementById("dynamic-list");
+                console.log("pointpanel")
+                for (const playerId in state.players) {
+
+                    const player = state.players[playerId]
+                    console.log(player)
+                    var li = document.createElement("li");
+                    li.setAttribute('id',player.playerId);
+                    li.appendChild(document.createTextNode(`${player.playerId} : ${player.points}`));
+                    ul.appendChild(li);
+                }
+            }
+
+            function pointPanelAddPlayer(command){
+
+                var ul = document.getElementById("dynamic-list");
+                var li = document.createElement("li");
+                li.setAttribute('id',command.playerId);
+                li.appendChild(document.createTextNode(`${command.playerId} : ${command.points}`));
+                ul.appendChild(li);
+            }
+
+            function pointPanelUpdatePlayer(player){
+                console.log("update")
+                console.log(player)
+                var item = document.getElementById(player.playerId);
+                item.innerHTML = `${player.playerId} : ${player.points}`;
+            }
+
+            function pointPanelRemovePlayer(player){
+                console.log("remove")
+                var ul = document.getElementById("dynamic-list");
+                var item = document.getElementById(player.playerId);
+                ul.removeChild(item);
+            }
+
 
             const game = createGame()
             const keyboardListener = createKeyboardListener();
@@ -32,11 +105,14 @@
             const socket = io();
 
             const button = document.querySelector("button");
-            const audio = document.querySelector("audio");
+            const audio = document.getElementById("getfruit");
+            audio.currentTime = 1.5;
+
 
             socket.on('connect', () => {
                 const playerId = socket.id;
                 console.log(`id client: ${playerId}`)
+
                 keyboardListener.unsubscribe()
                 const screen = document.getElementById("screen");
                 renderScreen(screen, game, requestAnimationFrame, playerId);
@@ -44,9 +120,8 @@
             
             socket.on('setup', (state) => {
                 const playerId = socket.id;
-                console.log(`receiving state from server`)
                 game.setState(state);
-
+                pointPanel(state);
                 keyboardListener.registerPlayerId(playerId)
                 keyboardListener.subscribe(game.movePlayer)
                 keyboardListener.subscribe((command) => {
@@ -57,17 +132,21 @@
             socket.on('add-player', (command) => {
                 console.log(`adding player`)
                 game.addPlayer(command);
+                if (command.playerId !== socket.id) {
+                    
+                    pointPanelAddPlayer(command);
+                }
             })
 
             socket.on('remove-player', (command) => {
                 game.removePlayer(command);
+                pointPanelRemovePlayer(command)
             })
             
             socket.on('move-player', (command) => {
                 const playerId = socket.id
 
                 if (playerId != command.playerId) {
-                    
                     game.movePlayer(command);
                 }
             })
@@ -77,11 +156,10 @@
             })
             
             socket.on('remove-fruit', (command) => {
-                
-                audio.currentTime = 1.5;
-                audio.pause();
+                const player = game.state.players[command.playerId]
                 game.removeFruit(command);
                 audio.play();
+                pointPanelUpdatePlayer(player)
             })
         </script>
     </body>

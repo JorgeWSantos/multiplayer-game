@@ -22,7 +22,7 @@ io.on('connection', (socket ) => {
 
   game.addPlayer({playerId:playerId});
 
-  socket.emit('setup', game.state)
+  socket.emit('setup', game.state);
 
   socket.on('disconnect', () => {
     console.log(`disconnected of server id: ${playerId}`)

@@ -42,8 +42,10 @@ function createGame() {
         const playerY = "playerY" in command ? command.playerY : Math.floor(Math.random() * 10);
         
         state.players[playerId] = {
+            playerId: playerId,
             x: playerX,
-            y: playerY
+            y: playerY,
+            points: 0
         };
 
         notifyAll({
@@ -51,6 +53,7 @@ function createGame() {
             playerId: playerId,
             playerX: playerX,
             playerY: playerY,
+            points: 0
         })
     }
 
@@ -95,7 +98,14 @@ function createGame() {
         notifyAll({
             type: 'remove-fruit',
             fruitId: fruitId,
+            playerId: command.playerId,
         })
+    }
+
+    function playerAddPoint(command){
+        const player = state.players[command.playerId]
+        player.points += 1;
+        console.log(player)
     }
 
     function checkForFruitCollision(player){
@@ -106,7 +116,8 @@ function createGame() {
 
             if (fruit.x == player.x && fruit.y == player.y) {
                 console.log("colision")
-                removeFruit({fruitId})
+                removeFruit({fruitId, playerId:player.playerId})
+                playerAddPoint(player)
             }
         }
     }
@@ -151,9 +162,7 @@ function createGame() {
 
         var move = acceptedMoves[command.keyPressed];
         var player = state.players[command.playerId];
-
         if(player && move){
-            
             move(player);
             checkForFruitCollision(player);
         }
@@ -168,7 +177,8 @@ function createGame() {
         removeFruit,
         setState,
         subscribe,
-        start
+        start,
+        playerAddPoint
     }
 }
 
