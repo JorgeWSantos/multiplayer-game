@@ -1,8 +1,17 @@
 export default function createKeybordListener(){
             
     const state = {
-        observers: []
+        observers: [],
+        playerId: null
     };
+
+    function registerPlayerId(playerId) {
+        state.playerId =  playerId;
+    }
+    
+    function unsubscribe() {
+        state.observers = [];
+    }
 
     function subscribe(observerFunction) {
         
@@ -10,7 +19,7 @@ export default function createKeybordListener(){
     };
 
     function notifyAll(command) {
-        console.log(`notifying ${state.observers.length} observers`);
+        console.log(`keyboard - notifying ${state.observers.length} observers`);
 
         for (const observerFunction of state.observers) {
             observerFunction(command)
@@ -22,12 +31,13 @@ export default function createKeybordListener(){
     function handleKeydown(event) {
 
         const command = {
-            playerId : 'player1',
+            type: 'move-player',
+            playerId : state.playerId,
             keyPressed : event.key
         };
 
         notifyAll(command)
     };
 
-    return { subscribe };
+    return { subscribe, registerPlayerId, unsubscribe };
 }
