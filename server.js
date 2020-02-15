@@ -8,21 +8,32 @@ const server = http.createServer(app);
 const io = socketio(server);
 const game = createGame();
 
-// game.addFruit({fruitId:"frutinha", fruitX:3, fruitY:3})
+game.start();
+game.subscribe((command) => {
+
+  console.log(`> Emitting ${command.type}`)
+  io.emit(command.type, command)
+})
 
 io.on('connection', (socket ) => {
 
   const playerId = socket.id;
-  console.log(`connected on server id: ${playerId}`)
+  console.log(`connected on server id: ${playerId}`);
 
-  game.addPlayer({playerId:playerId})
+  game.addPlayer({playerId:playerId});
 
   socket.emit('setup', game.state)
 
   socket.on('disconnect', () => {
     console.log(`disconnected of server id: ${playerId}`)
     game.removePlayer({ playerId: playerId })
-  })
+  });
+
+  socket.on('move-player', (command) => {
+    console.log(`move on server`)
+    game.movePlayer(command)
+  });
+
 });
 
 app.use(express.static('C://github//Jogo-Multiplayer'))
