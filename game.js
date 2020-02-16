@@ -11,15 +11,19 @@ function createGame() {
     }
 
     const observers = [];
+    var interval = null;
 
     function setState(newState) {
         Object.assign(state, newState)
     }
 
-    function start() {
-        const frequency = 10000;
+    function startAddFruit(frequency) {
 
-        setInterval(addFruit, frequency);
+        interval = setInterval(addFruit, frequency);
+    }
+
+    function stopAddFruit() {
+        clearInterval(interval)
     }
 
     function subscribe(observerFunction) {
@@ -177,8 +181,9 @@ function createGame() {
         removeFruit,
         setState,
         subscribe,
-        start,
-        playerAddPoint
+        startAddFruit,
+        stopAddFruit,
+        playerAddPoint,
     }
 }
 

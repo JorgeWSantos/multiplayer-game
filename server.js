@@ -41,6 +41,13 @@ io.on('connection', (socket ) => {
     console.log(`move on server`)
     game.movePlayer(command)
   });
+
+  socket.on('startFruit', (command) => {
+    game.stopAddFruit()
+    const frequency = Number(command) * 1000
+    console.log(frequency)
+    game.startAddFruit(frequency)
+  });
 });
 
 app.use(express.static('C://github//Jogo-Multiplayer'))

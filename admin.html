@@ -67,14 +67,14 @@
             
             <div id="div-ul">
                  <ul id="dynamic-list">
-                    <li id="testew"><h4>Point Pannel</h4></li>
+                    <li id="Pannel"><h4>Point Pannel</h4></li>
                 </ul>
             </div>
         </div>
 
         <div id="admin">
-            <input type="number" placeholder="tempo em segundos"/>
-            <button>add Fruit</button>
+            <input id="input" type="number" placeholder="tempo em segundos"/>
+            <button id="buttonAddFruit">add Fruit</button>
         </div>
     
         <audio id="getfruit" src="./sounds/getfruit.wav"> -
@@ -89,11 +89,21 @@
 
             const pointPanel = createPointPanel();
             const game = createGame()
-            
             const socket = io();
 
             const audio = document.getElementById("getfruit");
             audio.currentTime = 1.5;
+
+            const button = document.getElementById("buttonAddFruit");
+            const input = document.getElementById("input");
+
+            button.addEventListener('click', () => {
+                
+                if (Number(input.value) > 0) {
+                    
+                    socket.emit("startFruit", input.value)
+                }
+            });
 
             socket.on('connect', () => {
                 const playerId = socket.id;
