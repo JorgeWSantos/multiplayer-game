@@ -2,13 +2,16 @@ import express from 'express';
 import http from 'http';
 import {createGame} from './game.js';
 import socketio from 'socket.io';
+import path from 'path';
+const __dirname = path.resolve();
 
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 const game = createGame();
 
-// game.start();
+console.log("opa")
+console.log(__dirname)
 
 game.subscribe((command) => {
 
@@ -50,7 +53,7 @@ io.on('connection', (socket ) => {
   });
 });
 
-// app.use(express.static('C://github//Jogo-Multiplayer'))
+app.use(express.static(__dirname))
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
