@@ -61,6 +61,8 @@ app.get('/admin', function(req, res){
     res.sendFile('C://github//Jogo-Multiplayer//admin.html');
 });
 
-server.listen(3000, () =>{
+var port = process.env.PORT || 3000;
+
+server.listen(port, () =>{
     console.log("listening on 3000");
 });
