@@ -53,12 +53,11 @@ io.on('connection', (socket ) => {
 app.use(express.static('C://github//Jogo-Multiplayer'))
 
 app.get('/', function(req, res){
-  console.log("tesdte")
-  res.sendFile('C://github//Jogo-Multiplayer//index.html');
+  res.sendFile('index.html');
 });
 
 app.get('/admin', function(req, res){
-    res.sendFile('C://github//Jogo-Multiplayer//admin.html');
+    res.sendFile('admin.html');
 });
 
 var port = process.env.PORT || 3000;
