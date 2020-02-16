@@ -19,6 +19,10 @@
     "url": "https://github.com/JorgeWSantos/Jogo-Multiplayer/issues"
   },
   "homepage": "https://github.com/JorgeWSantos/Jogo-Multiplayer#readme",
+  "keywords": [
+    "example",
+    "heroku"
+  ],
   "dependencies": {
     "express": "^4.17.1",
     "socket.io": "^2.3.0"
