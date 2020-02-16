@@ -50,14 +50,14 @@ io.on('connection', (socket ) => {
   });
 });
 
-app.use(express.static('C://github//Jogo-Multiplayer'))
+// app.use(express.static('C://github//Jogo-Multiplayer'))
 
 app.get('/', function(req, res){
-  res.sendFile('index.html');
+  res.sendFile('./index.html');
 });
 
 app.get('/admin', function(req, res){
-    res.sendFile('admin.html');
+    res.sendFile('./admin.html');
 });
 
 var port = process.env.PORT || 3000;
