@@ -8,7 +8,8 @@ const server = http.createServer(app);
 const io = socketio(server);
 const game = createGame();
 
-game.start();
+// game.start();
+
 game.subscribe((command) => {
 
   console.log(`> Emitting ${command.type}`)
@@ -20,9 +21,16 @@ io.on('connection', (socket ) => {
   const playerId = socket.id;
   console.log(`connected on server id: ${playerId}`);
 
-  game.addPlayer({playerId:playerId});
+  socket.on('newPlayer', () => {
 
-  socket.emit('setup', game.state);
+    game.addPlayer({playerId:playerId});
+    socket.emit('setup', game.state);
+  });
+
+  socket.on('admin', () => {
+
+    socket.emit('setup', game.state);
+  });
 
   socket.on('disconnect', () => {
     console.log(`disconnected of server id: ${playerId}`)
@@ -33,14 +41,18 @@ io.on('connection', (socket ) => {
     console.log(`move on server`)
     game.movePlayer(command)
   });
-
 });
 
 app.use(express.static('C://github//Jogo-Multiplayer'))
 
 app.get('/', function(req, res){
-    res.sendFile('C://github//Jogo-Multiplayer//index.html');
-  });
+  console.log("tesdte")
+  res.sendFile('C://github//Jogo-Multiplayer//index.html');
+});
+
+app.get('/admin', function(req, res){
+    res.sendFile('C://github//Jogo-Multiplayer//admin.html');
+});
 
 server.listen(3000, () =>{
     console.log("listening on 3000");
