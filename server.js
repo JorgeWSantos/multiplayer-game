@@ -53,7 +53,7 @@ io.on('connection', (socket ) => {
 // app.use(express.static('C://github//Jogo-Multiplayer'))
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + './index.html');
+  res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/admin', function(req, res){
