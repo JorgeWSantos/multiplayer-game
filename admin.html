@@ -160,11 +160,11 @@
                 });
 
                 buttonStopFruit.addEventListener('click', () => {
-                    socket.emit("stopFruit")
+                    socket.emit("stopFruit");
                 });
 
                 buttonResetPoints.addEventListener('click', () => {
-                    console.log("reset")
+                    socket.emit("resetPoints");
                 });
 
                 socket.on('connect', () => {
@@ -209,9 +209,14 @@
                 
                 socket.on('remove-fruit', (command) => {
                     const player = game.state.players[command.playerId]
-                    ga1me.removeFruit(command);
+                    game.removeFruit(command);
                     audio.play();
                     pointPanel.updatePlayer(player)
+                })
+
+                socket.on('resetPoints', (command) => {
+                    game.setState(command.state);
+                    pointPanel.resetPoints(game.state);
                 })
             // }
             
