@@ -31,8 +31,11 @@ io.on('connection', (socket ) => {
   });
 
   socket.on('stopFruit', () => {
-    console.log("stoper")
     game.stopAddFruit();
+  });
+
+  socket.on('resetPoints', () => {
+    game.resetPoints();
   });
 
   socket.on('admin', () => {

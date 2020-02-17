@@ -3,11 +3,9 @@ export default function createPointPanel() {
     function setup(state, myPlayerId){
 
         var ul = document.getElementById("dynamic-list");
-        console.log("pointpanel")
         for (const playerId in state.players) {
 
             const player = state.players[playerId]
-            console.log(player)
             var li = document.createElement("li");
             li.setAttribute('id',player.playerId);
             if (myPlayerId == player.playerId) {
@@ -34,8 +32,16 @@ export default function createPointPanel() {
         item.innerHTML = `${player.playerId} : ${player.points}`;
     }
 
+    function resetPoints(state){
+
+        for (const playerId in state.players) {
+            const player = state.players[playerId]
+            var item = document.getElementById(playerId);
+            item.innerHTML = `${player.playerId} : ${player.points}`;
+        }
+    }
+
     function removePlayer(player){
-        console.log("remove")
         var ul = document.getElementById("dynamic-list");
         var item = document.getElementById(player.playerId);
         ul.removeChild(item);
@@ -45,7 +51,8 @@ export default function createPointPanel() {
         setup,
         addPlayer,
         updatePlayer,
-        removePlayer
+        removePlayer,
+        resetPoints
     }
 }
 

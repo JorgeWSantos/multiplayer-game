@@ -26,6 +26,19 @@ function createGame() {
         clearInterval(interval)
     }
 
+    function resetPoints() {
+
+        for (const playerId in state.players) {
+            const player = state.players[playerId]
+            player.points = 0
+        }
+
+        notifyAll({
+            type: 'resetPoints',
+            state: state
+        })
+    }
+
     function subscribe(observerFunction) {
         
         observers.push(observerFunction);
@@ -184,6 +197,7 @@ function createGame() {
         startAddFruit,
         stopAddFruit,
         playerAddPoint,
+        resetPoints
     }
 }
 

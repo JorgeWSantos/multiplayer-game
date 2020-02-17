@@ -145,6 +145,11 @@
                 audio.play();
                 pointPanel.updatePlayer(player)
             })
+
+            socket.on('resetPoints', (command) => {
+                game.setState(command.state)
+                pointPanel.resetPoints(game.state);
+            })
         </script>
     </body>
       
