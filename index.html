@@ -8,11 +8,10 @@
             #screen{
                 border: 10px solid #ccc;
                 image-rendering: pixelated;
-                image-rendering: crisp-edges;
-                image-rendering: -moz-crisp-edges;
-                width: 400px;
+                box-shadow: 0px 0px 18px 1px rgba(112,112,112,1);
+                width: 600px;
+                height: 500px;
                 min-width: 350px;
-                height: 400px;
                 min-height: 350px;
             }
 
@@ -52,9 +51,9 @@
                 border-style: solid;
                 border-radius: 4pt;
                 border-width: 2;
-                border-color: sandybrown;
+                border-color: #ccc;
+                box-shadow: 0px 0px 5px 1px rgba(112,112,112,1);
                 padding: 5px;
-                /* background-color: aqua; */
             }
 
         </style>
@@ -62,7 +61,7 @@
 
     <body>
         <div id="game">
-            <canvas id="screen" width="10" height="10"></canvas>
+            <canvas id="screen" width="30" height="30"></canvas>
             
             <div id="div-ul">
                  <ul id="dynamic-list">
@@ -145,8 +144,8 @@
                 pointPanel.updatePlayer(player)
             })
 
-            socket.on('resetPoints', (command) => {
-                game.setState(command.state)
+            socket.on('resetPoints', () => {
+                game.resetPoints();
                 pointPanel.resetPoints(game.state);
             })
 

@@ -8,12 +8,13 @@
             #screen{
                 border: 10px solid #ccc;
                 image-rendering: pixelated;
-                image-rendering: crisp-edges;
-                image-rendering: -moz-crisp-edges;
-                width: 400px;
-                min-width: 400px;
-                height: 400px;
-                min-height: 400px;
+                /* image-rendering: crisp-edges; */
+                /* image-rendering: -moz-crisp-edges; */
+                width: 600px;
+                height: 500px;
+                min-width: 350px;
+                min-height: 350px;
+                box-shadow: 0px 0px 18px 1px rgba(112,112,112,1);
             }
             
             #game{
@@ -71,22 +72,25 @@
                 border-radius: 4pt;
                 border-width: 2;
                 padding: 5px;
-                border-color: sandybrown;
+                border-color: #ccc;
+                box-shadow: 0px 0px 5px 1px rgba(112,112,112,1);
             }
 
             #admin{
+                box-shadow: 0px 0px 5px 1px rgba(112,112,112,1);
                 display: flex;
+                height: 180px;
                 flex-direction: column;
                 align-items: center;
-                margin: auto;
-                margin-top: 50px;
+                /* margin: 10px; */
+                /* margin-top: 50px; */
                 width: 200px;
                 padding-top: 10px;
                 padding-bottom: 10px;
                 border-style: solid;
                 border-radius: 4pt;
                 border-width: 2;
-                border-color: cadetblue;
+                border-color: #ccc;
             }
 
             input{
@@ -105,28 +109,29 @@
                 height: 30px;
             }
 
-
         </style>
     </head>
 
     <body>
         <div id="game">
-            <canvas id="screen" width="10" height="10"></canvas>
+            <canvas id="screen" width="30" height="30"></canvas>
             
             <div id="div-ul">
                  <ul id="dynamic-list">
                     <li id="Pannel"><h3>Point Pannel</h3></li>
                 </ul>
             </div>
+
+            <div id="admin">
+                <input id="input" type="number" placeholder="tempo em segundos"/>
+                <button id="buttonAddFruit" type="submit">Adicionar Frutas</button>
+                <button id="buttonStopFruit">Parar</button>
+                <button id="buttonReset">Resetar pontos</button>
+                <button id="buttonRemoveAllFruits">Remover Frutas</button>
+            </div>
         </div>
 
-        <div id="admin">
-            <input id="input" type="number" placeholder="tempo em segundos"/>
-            <button id="buttonAddFruit" type="submit">Adicionar Frutas</button>
-            <button id="buttonStopFruit">Parar</button>
-            <button id="buttonReset">Resetar pontos</button>
-            <button id="buttonRemoveAllFruits">Remover Frutas</button>
-        </div>
+        
     
         <audio id="getfruit" src="./sounds/getfruit.wav"> -
         <audio id="get100fruit" src="./sounds/get100-fruits.wav">
@@ -223,8 +228,8 @@
                     pointPanel.updatePlayer(player)
                 })
 
-                socket.on('resetPoints', (command) => {
-                    game.setState(command.state);
+                socket.on('resetPoints', () => {
+                    game.resetPoints();
                     pointPanel.resetPoints(game.state);
                 })
 

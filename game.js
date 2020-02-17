@@ -5,8 +5,8 @@ function createGame() {
         players: {},
         fruits: {},
         screen: {
-            width: 10,
-            height: 10
+            width: 30,
+            height: 30
         }
     }
 
@@ -35,7 +35,6 @@ function createGame() {
 
         notifyAll({
             type: 'resetPoints',
-            state: state
         })
     }
 
@@ -55,8 +54,8 @@ function createGame() {
     function addPlayer(command) {
 
         const playerId = command.playerId;
-        const playerX = "playerX" in command ? command.playerX : Math.floor(Math.random() * 10);
-        const playerY = "playerY" in command ? command.playerY : Math.floor(Math.random() * 10);
+        const playerX = "playerX" in command ? command.playerX : Math.floor(Math.random() * 30);
+        const playerY = "playerY" in command ? command.playerY : Math.floor(Math.random() * 30);
         
         state.players[playerId] = {
             playerId: playerId,
@@ -89,8 +88,8 @@ function createGame() {
     function addFruit(command) {
         
         const fruitId = command ? command.fruitId : Math.floor(Math.random() * 1000);
-        const fruitX = command ? command.fruitX : Math.floor(Math.random() * 10);
-        const fruitY = command ? command.fruitY : Math.floor(Math.random() * 10);
+        const fruitX = command ? command.fruitX : Math.floor(Math.random() * 30);
+        const fruitY = command ? command.fruitY : Math.floor(Math.random() * 30);
         
         
         state.fruits[fruitId] = {
@@ -120,7 +119,7 @@ function createGame() {
     }
 
     function removeAllFruits(command) {
-
+        console.log("remove all")
         state.fruits = command.fruits;
 
         notifyAll({
@@ -161,12 +160,18 @@ function createGame() {
                     
                     player.y = player.y + 1
                 }
+                else{
+                    player.y = 0
+                }
             },
     
             ArrowUp(player){
 
                 if (player.y > 0) {
                     player.y = player.y - 1
+                }
+                else{
+                    player.y = state.screen.height -1
                 }
             },
     
@@ -175,6 +180,8 @@ function createGame() {
                 if (player.x + 1 < state.screen.width) {
                     
                     player.x = player.x + 1
+                }else{
+                    player.x = 0
                 }
             },
     
@@ -183,6 +190,10 @@ function createGame() {
                 if (player.x > 0) {
                     
                     player.x = player.x - 1
+                }
+                else{
+                    
+                    player.x = state.screen.width - 1
                 }
             }
         }
