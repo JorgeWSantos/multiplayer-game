@@ -2,6 +2,7 @@
     <head>
         <meta charset="utf-8"/>
         <title>Admin</title>
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400&display=swap" rel="stylesheet">
         <link rel="shortcut icon" href="#" />
         <style>
             #screen{
@@ -14,17 +15,36 @@
                 height: 400px;
                 min-height: 400px;
             }
-
+            
             #game{
                 display: flex;
                 flex-direction: row;
-                justify-content: space-between;
+                justify-content: space-around;
                 padding-left: 30px;
                 padding-right: 100px;
+                margin-top: 30px;
+            }
+
+            h3{
+                font-family: 'Ubuntu', sans-serif;
+                font-weight: 700;
+                font-size: 17px;
+                /* background-color: aqua; */
+            }
+
+            li{
+                font-family: 'Ubuntu', sans-serif;
+                font-weight: 600;
+                font-size: 15px;
+                /* background-color: aqua; */
             }
 
             ul{
                 list-style-type:none;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+
             }
 
             #div-ul{
@@ -32,8 +52,8 @@
                 border-style: solid;
                 border-radius: 4pt;
                 border-width: 2;
+                padding: 5px;
                 border-color: sandybrown;
-                /* background-color: aqua; */
             }
 
             #admin{
@@ -56,7 +76,10 @@
                 min-width: 150px;
                 text-align: center;
                 margin-top: 5px;
+                font-family: 'Ubuntu', sans-serif;
+                font-weight: 500;
             }
+
 
         </style>
     </head>
@@ -67,14 +90,14 @@
             
             <div id="div-ul">
                  <ul id="dynamic-list">
-                    <li id="Pannel"><h4>Point Pannel</h4></li>
+                    <li id="Pannel"><h3>Point Pannel</h3></li>
                 </ul>
             </div>
         </div>
 
         <div id="admin">
             <input id="input" type="number" placeholder="tempo em segundos"/>
-            <button id="buttonAddFruit">add Fruit</button>
+            <button id="buttonAddFruit">Adicionar Frutas</button>
         </div>
     
         <audio id="getfruit" src="./sounds/getfruit.wav"> -
@@ -87,70 +110,76 @@
             import {createGame} from './game.js';
             import createPointPanel from './PointPanel.js';
 
-            const pointPanel = createPointPanel();
-            const game = createGame()
-            const socket = io();
+            var valor = window.prompt("senha")
+            if (valor=="adm123") {
+                const pointPanel = createPointPanel();
+                const game = createGame()
+                const socket = io();
 
-            const audio = document.getElementById("getfruit");
-            audio.currentTime = 1.5;
+                const audio = document.getElementById("getfruit");
+                audio.currentTime = 1.5;
 
-            const button = document.getElementById("buttonAddFruit");
-            const input = document.getElementById("input");
+                const button = document.getElementById("buttonAddFruit");
+                const input = document.getElementById("input");
 
-            button.addEventListener('click', () => {
+                button.addEventListener('click', () => {
+                    
+                    if (Number(input.value) > 0) {
+                        
+                        socket.emit("startFruit", input.value)
+                    }
+                });
+
+                socket.on('connect', () => {
+                    const playerId = socket.id;
+                    console.log(`id client: ${playerId}`)
+                    socket.emit('admin')
+                    const screen = document.getElementById("screen");
+                    renderScreen(screen, game, requestAnimationFrame, playerId);
+                })
                 
-                if (Number(input.value) > 0) {
-                    
-                    socket.emit("startFruit", input.value)
-                }
-            });
+                socket.on('setup', (state) => {
+                    const playerId = socket.id;
+                    game.setState(state);
+                    pointPanel.setup(state)
+                })
 
-            socket.on('connect', () => {
-                const playerId = socket.id;
-                console.log(`id client: ${playerId}`)
-                socket.emit('admin')
-                const screen = document.getElementById("screen");
-                renderScreen(screen, game, requestAnimationFrame, playerId);
-            })
-            
-            socket.on('setup', (state) => {
-                const playerId = socket.id;
-                game.setState(state);
-                pointPanel.setup(state)
-            })
+                socket.on('add-player', (command) => {
+                    console.log(`adding player`)
+                    game.addPlayer(command);
+                    if (command.playerId !== socket.id) {
+                        
+                        pointPanel.addPlayer(command);
+                    }
+                })
 
-            socket.on('add-player', (command) => {
-                console.log(`adding player`)
-                game.addPlayer(command);
-                if (command.playerId !== socket.id) {
-                    
-                    pointPanel.addPlayer(command);
-                }
-            })
+                socket.on('remove-player', (command) => {
+                    game.removePlayer(command);
+                    pointPanel.removePlayer(command)
+                })
+                
+                socket.on('move-player', (command) => {
+                    const playerId = socket.id
 
-            socket.on('remove-player', (command) => {
-                game.removePlayer(command);
-                pointPanel.removePlayer(command)
-            })
-            
-            socket.on('move-player', (command) => {
-                const playerId = socket.id
+                    if (playerId != command.playerId) {
+                        game.movePlayer(command);
+                    }
+                })
+                
+                socket.on('add-fruit', (command) => {
+                    game.addFruit(command)
+                })
+                
+                socket.on('remove-fruit', (command) => {
+                    const player = game.state.players[command.playerId]
+                    ga1me.removeFruit(command);
+                    audio.play();
+                    pointPanel.updatePlayer(player)
+                })
+            }
+            console.log(valor)
 
-                if (playerId != command.playerId) {
-                    game.movePlayer(command);
-                }
-            })
             
-            socket.on('add-fruit', (command) => {
-                game.addFruit(command)
-            })
-            
-            socket.on('remove-fruit', (command) => {
-                const player = game.state.players[command.playerId]
-                game.removeFruit(command);
-                audio.play();
-                pointPanel.updatePlayer(player)
-            })
         </script>
     </body>
       
