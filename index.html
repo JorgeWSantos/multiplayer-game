@@ -2,7 +2,7 @@
     <head>
         <meta charset="utf-8"/>
         <title>Jogo Multiplayer</title>
-        <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400&display=swap" rel="stylesheet">
         <link rel="shortcut icon" href="#" />
         <style>
             #screen{
@@ -11,21 +11,31 @@
                 image-rendering: crisp-edges;
                 image-rendering: -moz-crisp-edges;
                 width: 400px;
-                min-width: 400px;
+                min-width: 350px;
                 height: 400px;
-                min-height: 400px;
+                min-height: 350px;
             }
 
             #game{
                 display: flex;
                 flex-direction: row;
-                justify-content: space-between;
+                justify-content: space-evenly;
                 padding-left: 30px;
-                padding-right: 100px;
+                padding-right: 30px;
+                margin-top: 30px;
             }
 
             h3{
                 font-family: 'Ubuntu', sans-serif;
+                font-weight: 700;
+                font-size: 17px;
+                /* background-color: aqua; */
+            }
+
+            li{
+                font-family: 'Ubuntu', sans-serif;
+                font-weight: 600;
+                font-size: 15px;
                 /* background-color: aqua; */
             }
 
@@ -43,6 +53,7 @@
                 border-radius: 4pt;
                 border-width: 2;
                 border-color: sandybrown;
+                padding: 5px;
                 /* background-color: aqua; */
             }
 
@@ -94,7 +105,7 @@
             socket.on('setup', (state) => {
                 const playerId = socket.id;
                 game.setState(state);
-                pointPanel.setup(state)
+                pointPanel.setup(state, socket.id)
                 keyboardListener.registerPlayerId(playerId)
                 keyboardListener.subscribe(game.movePlayer)
                 keyboardListener.subscribe((command) => {

@@ -1,6 +1,6 @@
 export default function createPointPanel() {
 
-    function setup(state){
+    function setup(state, myPlayerId){
 
         var ul = document.getElementById("dynamic-list");
         console.log("pointpanel")
@@ -10,6 +10,9 @@ export default function createPointPanel() {
             console.log(player)
             var li = document.createElement("li");
             li.setAttribute('id',player.playerId);
+            if (myPlayerId == player.playerId) {
+                li.style.color = "red"
+            }
             li.appendChild(document.createTextNode(`${player.playerId} : ${player.points}`));
             ul.appendChild(li);
         }
