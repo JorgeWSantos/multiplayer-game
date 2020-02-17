@@ -21,8 +21,26 @@
                 flex-direction: row;
                 justify-content: space-around;
                 padding-left: 30px;
-                padding-right: 100px;
+                padding-right: 3admin1230px;
                 margin-top: 30px;
+            }
+
+            button {
+                display: flex;
+                border-radius: 4px;
+                background-color:#ffffff;
+                color: #ef5350;
+                border: solid 1.5px #ccc;
+                justify-content: center;
+                align-items: center;
+                max-width: 180px;
+                min-width: 180px;
+                text-align: center;
+                margin-top: 5px;
+                font-family: 'Ubuntu', sans-serif;
+                font-weight: 600;
+                font-size: 15px;
+                height: 30px;
             }
 
             h3{
@@ -71,13 +89,20 @@
                 border-color: cadetblue;
             }
 
-            button, input{
-                max-width: 150px;
-                min-width: 150px;
+            input{
+                border-radius: 4px;
+                border: solid 1.5px #ccc;
+                color: #757575;
+                box-shadow: none;
+                max-width: 180px;
+                min-width: 180px;
                 text-align: center;
                 margin-top: 5px;
                 font-family: 'Ubuntu', sans-serif;
-                font-weight: 500;
+                font-family: 'Ubuntu', sans-serif;
+                font-weight: 600;
+                font-size: 15px;
+                height: 30px;
             }
 
 
@@ -97,7 +122,9 @@
 
         <div id="admin">
             <input id="input" type="number" placeholder="tempo em segundos"/>
-            <button id="buttonAddFruit">Adicionar Frutas</button>
+            <button id="buttonAddFruit" type="submit">Adicionar Frutas</button>
+            <button id="buttonStopFruit">Parar</button>
+            <button id="buttonReset">Resetar pontos</button>
         </div>
     
         <audio id="getfruit" src="./sounds/getfruit.wav"> -
@@ -110,8 +137,8 @@
             import {createGame} from './game.js';
             import createPointPanel from './PointPanel.js';
 
-            var valor = window.prompt("senha")
-            if (valor=="adm123") {
+            // var valor = window.prompt("senha")
+            // if (valor=="adm123") {
                 const pointPanel = createPointPanel();
                 const game = createGame()
                 const socket = io();
@@ -119,15 +146,25 @@
                 const audio = document.getElementById("getfruit");
                 audio.currentTime = 1.5;
 
-                const button = document.getElementById("buttonAddFruit");
+                const buttonAddFruit = document.getElementById("buttonAddFruit");
+                const buttonStopFruit = document.getElementById("buttonStopFruit");
+                const buttonResetPoints = document.getElementById("buttonReset");
                 const input = document.getElementById("input");
 
-                button.addEventListener('click', () => {
+                buttonAddFruit.addEventListener('click', () => {
                     
                     if (Number(input.value) > 0) {
                         
                         socket.emit("startFruit", input.value)
                     }
+                });
+
+                buttonStopFruit.addEventListener('click', () => {
+                    socket.emit("stopFruit")
+                });
+
+                buttonResetPoints.addEventListener('click', () => {
+                    console.log("reset")
                 });
 
                 socket.on('connect', () => {
@@ -176,12 +213,9 @@
                     audio.play();
                     pointPanel.updatePlayer(player)
                 })
-            }
-            console.log(valor)
-
+            // }
             
         </script>
     </body>
       
-    
 </html>

@@ -30,6 +30,11 @@ io.on('connection', (socket ) => {
     socket.emit('setup', game.state);
   });
 
+  socket.on('stopFruit', () => {
+    console.log("stoper")
+    game.stopAddFruit();
+  });
+
   socket.on('admin', () => {
 
     socket.emit('setup', game.state);
