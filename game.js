@@ -119,6 +119,16 @@ function createGame() {
         })
     }
 
+    function removeAllFruits(command) {
+
+        state.fruits = command.fruits;
+
+        notifyAll({
+            type: 'removeAllFruits',
+            fruits: state.fruits,
+        })
+    }
+
     function playerAddPoint(command){
         const player = state.players[command.playerId]
         player.points += 1;
@@ -197,7 +207,8 @@ function createGame() {
         startAddFruit,
         stopAddFruit,
         playerAddPoint,
-        resetPoints
+        resetPoints,
+        removeAllFruits
     }
 }
 

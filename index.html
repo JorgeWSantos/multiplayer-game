@@ -98,7 +98,6 @@
 
                 keyboardListener.unsubscribe()
                 const screen = document.getElementById("screen");
-                const command = {playerId:socket.id}
                 renderScreen(screen, game, requestAnimationFrame, playerId);
             })
             
@@ -149,6 +148,11 @@
             socket.on('resetPoints', (command) => {
                 game.setState(command.state)
                 pointPanel.resetPoints(game.state);
+            })
+
+            socket.on('removeAllFruits', (command) => {
+
+                game.removeAllFruits(command);
             })
         </script>
     </body>

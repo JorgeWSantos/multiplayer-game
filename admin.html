@@ -19,9 +19,9 @@
             #game{
                 display: flex;
                 flex-direction: row;
-                justify-content: space-around;
+                justify-content: space-evenly;
                 padding-left: 30px;
-                padding-right: 3admin1230px;
+                padding-right: 30px;
                 margin-top: 30px;
             }
 
@@ -79,7 +79,7 @@
                 flex-direction: column;
                 align-items: center;
                 margin: auto;
-                margin-top: 20px;
+                margin-top: 50px;
                 width: 200px;
                 padding-top: 10px;
                 padding-bottom: 10px;
@@ -125,6 +125,7 @@
             <button id="buttonAddFruit" type="submit">Adicionar Frutas</button>
             <button id="buttonStopFruit">Parar</button>
             <button id="buttonReset">Resetar pontos</button>
+            <button id="buttonRemoveAllFruits">Remover Frutas</button>
         </div>
     
         <audio id="getfruit" src="./sounds/getfruit.wav"> -
@@ -149,6 +150,7 @@
                 const buttonAddFruit = document.getElementById("buttonAddFruit");
                 const buttonStopFruit = document.getElementById("buttonStopFruit");
                 const buttonResetPoints = document.getElementById("buttonReset");
+                const buttonRemoveAllFruits = document.getElementById("buttonRemoveAllFruits");
                 const input = document.getElementById("input");
 
                 buttonAddFruit.addEventListener('click', () => {
@@ -165,6 +167,13 @@
 
                 buttonResetPoints.addEventListener('click', () => {
                     socket.emit("resetPoints");
+                });
+
+                buttonRemoveAllFruits.addEventListener('click', () => {
+                    var command = {
+                        fruits: []
+                    }
+                    socket.emit("removeAllFruits", command);
                 });
 
                 socket.on('connect', () => {
@@ -217,6 +226,11 @@
                 socket.on('resetPoints', (command) => {
                     game.setState(command.state);
                     pointPanel.resetPoints(game.state);
+                })
+
+                socket.on('removeAllFruits', (command) => {
+
+                    game.removeAllFruits(command);
                 })
             // }
             

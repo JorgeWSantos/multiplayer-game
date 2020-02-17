@@ -34,6 +34,10 @@ io.on('connection', (socket ) => {
     game.stopAddFruit();
   });
 
+  socket.on('removeAllFruits', (command) => {
+    game.removeAllFruits(command);
+  });
+
   socket.on('resetPoints', () => {
     game.resetPoints();
   });
