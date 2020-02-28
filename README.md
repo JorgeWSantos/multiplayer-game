@@ -12,4 +12,4 @@
 
 ### Para entrar na pagina do GM e iniciar o jogo acesse esse [link](https://sliterioparaguay.herokuapp.com/admin).
 
-![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
+<!---![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)--->
