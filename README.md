@@ -8,8 +8,8 @@
 
 ### Há uma página pro GM e pro jogador comum, a senha do GM é **"admin123"**.
 
-### Para testar o jogo você pode estar acessando por esse [link](https://meujogomultiplayer.herokuapp.com/).
+### Para testar o jogo você pode estar acessando por esse [link](https://sliterioparaguay.herokuapp.com/).
 
-### Para entrar na pagina do GM e iniciar o jogo acesse esse [link](https://meujogomultiplayer.herokuapp.com/admin).
+### Para entrar na pagina do GM e iniciar o jogo acesse esse [link](https://sliterioparaguay.herokuapp.com/admin).
 
 ![Alt Text](https://media.giphy.com/media/vFKqnCdLPNOKc/giphy.gif)
